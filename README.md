@@ -6,6 +6,6 @@ O APP foi criado com NodeJS em 2023 e serve apenas para consultas simpes de valo
 Essa API hoje está rodando no APP Engine do GCP com acesso apenas para o site da [CUIDAR](https://www.acuidar.com.br).
 
 
-## Links APP
+## Versão
 
 V01
