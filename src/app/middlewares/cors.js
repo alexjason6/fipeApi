@@ -1,6 +1,10 @@
 module.exports = (request, response, next) => {
-  response.setHeader('Access-Control-Allow-Origin', 'https://www.acuidar.com.br');
-  response.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  const allowedOrigins = ['https://acuidar.com.br', 'https://*.acuidar.com.br', 'https://www.acuidar.com.br', 'http://localhost:3000'];
+  const origin = request.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    response.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTION');
   response.setHeader('Access-Control-Allow-Headers', '*');
   next();
 };
