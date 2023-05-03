@@ -1,7 +1,6 @@
 const { initializeApp } = require('firebase/app');
-const {
-  getFirestore, doc, setDoc,
-}  = require('firebase/firestore');
+const { getFirestore, doc, setDoc, getDocs, collection} = require('firebase/firestore');
+const { randomBytes } = require('crypto');
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBdlk20of_KtjBbCcnY1FTIeQxm1a6GnF4',
@@ -14,24 +13,26 @@ const firebaseConfig = {
   measurementId: 'G-271VB7MGDK',
 };
 
+
+const initialize = initializeApp(firebaseConfig);
+const database = getFirestore(initialize);
+
 class FipeRepository {
   async findAll() {
+    const response = [];
+    const documents = await getDocs(collection(database, 'cotacoes'));
 
-    const initialize = initializeApp(firebaseConfig);
-    const database = getFirestore(initialize);
-  
-    const response = await setDoc(doc(database, 'cotacaoSite', data.nome), {
-      dadosCotacao: data,
-    });
+    documents.forEach((document) => response.push(document.data()));
 
     return response;
   }
 
   async create(data) {
-    const response = await fetch(`${url}/${endPoint}`, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }).then((res) => res.json());
+    const id = randomBytes(8).toString('hex');
+    const response = await setDoc(doc(database, 'cotacoes', id), {
+      dadosCotacao: data,
+      id,
+    });
 
     return response;
   }
