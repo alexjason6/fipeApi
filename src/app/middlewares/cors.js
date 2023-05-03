@@ -6,6 +6,6 @@ module.exports = (request, response, next) => {
   }
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, HEAD, OPTION');
   response.setHeader('Access-Control-Allow-Headers', '*');
-  response.setHeader('Access-Control-Request-Headers', 'Content-Type')
+  response.setHeader('Access-Control-Request-Headers', 'Content-Type');
   next();
 };
