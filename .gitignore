@@ -141,6 +141,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 google-cloud-sdk/
-google-cloud-sdk/*
+google-cloud-sdk/lib
+google-cloud-sdk/data
 
 # End of https://www.toptal.com/developers/gitignore/api/node
