@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getFirestore, doc, setDoc, getDocs, collection} = require('firebase/firestore');
+const { getFirestore, doc, setDoc, getDocs, collection, getDoc} = require('firebase/firestore');
 const { randomBytes } = require('crypto');
 
 const firebaseConfig = {
@@ -29,12 +29,21 @@ class FipeRepository {
 
   async create(data) {
     const id = randomBytes(8).toString('hex');
-    const response = await setDoc(doc(database, 'cotacoes', id), {
+    await setDoc(doc(database, 'cotacoes', id), {
       dadosCotacao: data,
       id,
     });
 
-    return response;
+    const document = doc(database, 'cotacoes', id);
+    const documentInserted = await getDoc(document);
+
+    const response = documentInserted.data();
+
+    if (documentInserted.exists()) {
+      return response;
+    } else {
+      return {error: 'Documento não inserido. Tente novamente em instantes.'}
+    }
   }
 }
 

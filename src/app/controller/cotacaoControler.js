@@ -11,7 +11,7 @@ class CotacaoController {
     const data = request.body;
     const cotacao = await CotacaoRepository.create(data);
 
-    response.json(cotacao);
+    response.send(cotacao);
   }
 
 }
