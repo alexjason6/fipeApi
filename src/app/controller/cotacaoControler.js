@@ -17,6 +17,7 @@ class CotacaoController {
   async update(request, response) {
     const id = request.params;
     const data = request.body;
+
     const cotacao = await CotacaoRepository.update(id, data);
 
     response.send(cotacao);

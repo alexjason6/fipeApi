@@ -47,13 +47,14 @@ class FipeRepository {
   }
 
   async update(id, data) {
+    const idCotacao = id.id;
 
-    await setDoc(doc(database, 'cotacoes', id), {
+     await setDoc(doc(database, 'cotacoes', idCotacao), {
       dadosCotacao: data,
-      id,
+      id: idCotacao,
     });
 
-    const document = doc(database, 'cotacoes', id);
+    const document = doc(database, 'cotacoes', idCotacao);
     const documentInserted = await getDoc(document);
 
     const response = documentInserted.data();
