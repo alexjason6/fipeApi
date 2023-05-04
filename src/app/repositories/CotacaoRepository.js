@@ -45,6 +45,25 @@ class FipeRepository {
       return {error: 'Documento não inserido. Tente novamente em instantes.'}
     }
   }
+
+  async update(id, data) {
+
+    await setDoc(doc(database, 'cotacoes', id), {
+      dadosCotacao: data,
+      id,
+    });
+
+    const document = doc(database, 'cotacoes', id);
+    const documentInserted = await getDoc(document);
+
+    const response = documentInserted.data();
+
+    if (documentInserted.exists()) {
+      return response;
+    } else {
+      return {error: 'Documento não inserido. Tente novamente em instantes.'}
+    }
+  }
 }
 
 module.exports = new FipeRepository();

@@ -10,6 +10,7 @@ router.get('/productscotacao', productsControler.index);
 //Rotas para cotação
 router.get('/lista-cotacoes', cotacaoControler.index);
 router.post('/adiciona-cotacao', cotacaoControler.create);
+router.put('/atualiza-cotacao/:id', cotacaoControler.update);
 
 //Rotas para lidar com consulta FIPE
 router.get('/tabela-referencia', fipeControler.index);
