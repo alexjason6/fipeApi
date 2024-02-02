@@ -4,7 +4,9 @@ module.exports = (request, response, next) => {
     'https://*.acuidar.com.br',
     'https://www.acuidar.com.br',
     'http://localhost:3000',
-    'https://cuidar-frontend-dot-form-cuidar-app.uc.r.appspot.com'
+    'https://*.starfence.com.br/*',
+    'https://*.starfence.com.br/',
+    'https://www.starfence.com.br/*'
   ];
   const origin = request.headers.origin;
   
