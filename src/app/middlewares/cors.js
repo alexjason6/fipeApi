@@ -1,5 +1,11 @@
 module.exports = (request, response, next) => {
-  const allowedOrigins = ['https://acuidar.com.br', 'https://*.acuidar.com.br', 'https://www.acuidar.com.br', 'http://localhost:3000'];
+  const allowedOrigins = [
+    'https://acuidar.com.br',
+    'https://*.acuidar.com.br',
+    'https://www.acuidar.com.br',
+    'http://localhost:3000',
+    'https://cuidar-frontend-dot-form-cuidar-app.uc.r.appspot.com'
+  ];
   const origin = request.headers.origin;
   
   if (allowedOrigins.includes(origin)) {

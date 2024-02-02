@@ -11,8 +11,8 @@ app.use(cors);
 app.use(routes);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3002;
 
 app.listen(PORT,  () => {
-  console.log('API FIPE - Servidor rodando.');
+  console.log('API FIPE - Servidor rodando na porta 30002.');
 });
