@@ -39,7 +39,7 @@
      && rm -rf /var/lib/apt/lists/*
   
     #RUN mkdir -p dist build public prisma
-  
+    #
   
     # Copia somente o necessário do builder
     COPY --from=builder /app ./
