@@ -11,8 +11,8 @@
     "nodemailer": "^6.9.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "start": "node fipe.js",
+    "build": "yarn install --immutable"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
