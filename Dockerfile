@@ -16,10 +16,6 @@ RUN corepack enable \
 # copia o resto da aplicação
 COPY . .
 
-# muda a posse pro usuário não-root
-RUN chown -R nodeuser:nodeuser /app
-USER nodeuser
-
 EXPOSE 3002
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \

@@ -19,4 +19,7 @@ router.post('/listmodels', fipeControler.showModels);
 router.post('/listyears', fipeControler.showYears);
 router.post('/showresults', fipeControler.result);
 
+router.get("/health", (req, res) => res.status(200).json({status: "ok"}));
+
+
 module.exports = router;
