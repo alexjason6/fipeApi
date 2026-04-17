@@ -9,9 +9,10 @@ class FipeRepository {
         'Content-Type': 'application/json',
       }
     }).then((res) => {res.json();
-      console.log('response', response);
       console.log('res', res.json());
     });
+
+    console.log('response', response);
 
     return response;
   }
