@@ -2,6 +2,8 @@ FROM node:22
 
 ENV NODE_ENV=production
 ENV PORT=3002
+# Optional: set FIPE_PROXY_URL (or HTTPS_PROXY) at runtime if the host IP is
+# blocked by Cloudflare. Example: FIPE_PROXY_URL=http://user:pass@proxy:8080
 
 # cria usuário não-root
 RUN useradd -m nodeuser
