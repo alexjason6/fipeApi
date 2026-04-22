@@ -2,6 +2,13 @@ const { parallelumToken } = require('../../config/keys');
 
 const baseUrl = 'https://fipe.parallelum.com.br/api/v2';
 
+function segmentForVehicleType(vehicleType) {
+  if (vehicleType === 1 || vehicleType === '1' || vehicleType === 'cars') return 'cars';
+  if (vehicleType === 2 || vehicleType === '2' || vehicleType === 'motorcycles') return 'motorcycles';
+  if (vehicleType === 3 || vehicleType === '3' || vehicleType === 'trucks') return 'trucks';
+  return 'cars';
+}
+
 class ParallelumRepository {
   getHeaders() {
     return {
@@ -20,7 +27,7 @@ class ParallelumRepository {
   }
 
   async getBrands(vehicleType, reference) {
-    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
+    const tipo = segmentForVehicleType(vehicleType);
     const url = new URL(`${baseUrl}/${tipo}/brands`);
     if (reference) url.searchParams.set('reference', reference);
 
@@ -32,7 +39,7 @@ class ParallelumRepository {
   }
 
   async getModels(vehicleType, brandId, reference) {
-    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
+    const tipo = segmentForVehicleType(vehicleType);
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models`);
     if (reference) url.searchParams.set('reference', reference);
 
@@ -44,7 +51,7 @@ class ParallelumRepository {
   }
 
   async getYears(vehicleType, brandId, modelId, reference) {
-    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
+    const tipo = segmentForVehicleType(vehicleType);
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years`);
     if (reference) url.searchParams.set('reference', reference);
 
@@ -56,7 +63,7 @@ class ParallelumRepository {
   }
 
   async getValue(vehicleType, brandId, modelId, yearId, reference) {
-    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
+    const tipo = segmentForVehicleType(vehicleType);
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years/${yearId}`);
     if (reference) url.searchParams.set('reference', reference);
 
