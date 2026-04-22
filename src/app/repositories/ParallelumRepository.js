@@ -20,7 +20,8 @@ class ParallelumRepository {
   }
 
   async getBrands(vehicleType, reference) {
-    const url = new URL(`${baseUrl}/${vehicleType}/brands`);
+    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
+    const url = new URL(`${baseUrl}/${tipo}/brands`);
     if (reference) url.searchParams.set('reference', reference);
 
     const response = await fetch(url, {
@@ -31,7 +32,8 @@ class ParallelumRepository {
   }
 
   async getModels(vehicleType, brandId, reference) {
-    const url = new URL(`${baseUrl}/${vehicleType}/brands/${brandId}/models`);
+    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models`);
     if (reference) url.searchParams.set('reference', reference);
 
     const response = await fetch(url, {
@@ -42,7 +44,8 @@ class ParallelumRepository {
   }
 
   async getYears(vehicleType, brandId, modelId, reference) {
-    const url = new URL(`${baseUrl}/${vehicleType}/brands/${brandId}/models/${modelId}/years`);
+    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years`);
     if (reference) url.searchParams.set('reference', reference);
 
     const response = await fetch(url, {
@@ -53,7 +56,8 @@ class ParallelumRepository {
   }
 
   async getValue(vehicleType, brandId, modelId, yearId, reference) {
-    const url = new URL(`${baseUrl}/${vehicleType}/brands/${brandId}/models/${modelId}/years/${yearId}`);
+    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years/${yearId}`);
     if (reference) url.searchParams.set('reference', reference);
 
     const response = await fetch(url, {
