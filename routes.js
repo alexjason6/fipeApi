@@ -1,6 +1,7 @@
 const { Router } = require('express');
 //const cotacaoControler = require('./src/app/controller/cotacaoControler');
 const fipeControler = require('./src/app/controller/fipeControler');
+const parallelumControler = require('./src/app/controller/parallelumControler');
 //const productsControler = require('./src/app/controller/productsControler');
 const router = Router();
 
@@ -18,6 +19,13 @@ router.post('/listbrands', fipeControler.showBrands);
 router.post('/listmodels', fipeControler.showModels);
 router.post('/listyears', fipeControler.showYears);
 router.post('/showresults', fipeControler.result);
+
+//Rotas para consulta FIPE via Parallelum
+router.get('/parallelum/tabela-referencia', parallelumControler.index);
+router.post('/parallelum/listbrands', parallelumControler.showBrands);
+router.post('/parallelum/listmodels', parallelumControler.showModels);
+router.post('/parallelum/listyears', parallelumControler.showYears);
+router.post('/parallelum/showresults', parallelumControler.result);
 
 router.get("/health", (req, res) => res.status(200).json({status: "ok"}));
 
