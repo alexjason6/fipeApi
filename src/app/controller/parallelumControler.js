@@ -1,3 +1,4 @@
+const { toParallelumParams } = require('../utils/toParallelumParams');
 const ParallelumRepository = require('../repositories/ParallelumRepository');
 
 class ParallelumController {
@@ -7,26 +8,26 @@ class ParallelumController {
   }
 
   async showBrands(request, response) {
-    const { vehicleType = 'cars', reference } = request.body;
-    const brands = await ParallelumRepository.getBrands(vehicleType, reference);
+    const p = toParallelumParams(request.body);
+    const brands = await ParallelumRepository.getBrands(p.vehicleType, p.reference);
     response.json(brands);
   }
 
   async showModels(request, response) {
-    const { vehicleType = 'cars', brandId, reference } = request.body;
-    const models = await ParallelumRepository.getModels(vehicleType, brandId, reference);
+    const p = toParallelumParams(request.body);
+    const models = await ParallelumRepository.getModels(p.vehicleType, p.brandId, p.reference);
     response.json(models);
   }
 
   async showYears(request, response) {
-    const { vehicleType = 'cars', brandId, modelId, reference } = request.body;
-    const years = await ParallelumRepository.getYears(vehicleType, brandId, modelId, reference);
+    const p = toParallelumParams(request.body);
+    const years = await ParallelumRepository.getYears(p.vehicleType, p.brandId, p.modelId, p.reference);
     response.json(years);
   }
 
   async result(request, response) {
-    const { vehicleType = 'cars', brandId, modelId, yearId, reference } = request.body;
-    const result = await ParallelumRepository.getValue(vehicleType, brandId, modelId, yearId, reference);
+    const p = toParallelumParams(request.body);
+    const result = await ParallelumRepository.getValue(p.vehicleType, p.brandId, p.modelId, p.yearId, p.reference);
     response.json(result);
   }
 }
