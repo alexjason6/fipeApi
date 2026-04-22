@@ -1,5 +1,5 @@
 const { useFipeOficial } = require('../../config/keys');
-const { toParallelumParams } = require('../utils/toParallelumParams');
+const { toParallelumParams, isValidParallelumYearId } = require('../utils/toParallelumParams');
 const FipeRepository = require('../repositories/FipeRepository');
 const ParallelumRepository = require('../repositories/ParallelumRepository');
 
@@ -49,6 +49,14 @@ class FipeController {
   async result(request, response) {
     const data = request.body;
     const p = toParallelumParams(data);
+
+    if (!useFipeOficial && !isValidParallelumYearId(p.yearId)) {
+      return response.status(400).json({
+        error:
+          'Parallelum exige o ano no path como ANO-CÓDIGO_COMBUSTÍVEL (ex.: 2017-3). Envie anoModelo e codigoTipoCombustivel no JSON, ou yearId já montado.',
+        computed: p,
+      });
+    }
 
     const result = useFipeOficial
       ? await FipeRepository.list(data, 'ConsultarValorComTodosParametros')

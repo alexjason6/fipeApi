@@ -1,33 +1,73 @@
 const vehicleTypeMap = { 1: 'cars', 2: 'motorcycles', 3: 'trucks' };
 
+/** Aceita camelCase ou PascalCase (ex.: clientes .NET). */
+function getField(data, ...names) {
+  for (const name of names) {
+    const v = data[name];
+    if (v !== undefined && v !== null && v !== '') return v;
+  }
+  const lower = {};
+  for (const k of Object.keys(data)) {
+    lower[k.toLowerCase()] = data[k];
+  }
+  for (const name of names) {
+    const v = lower[name.toLowerCase()];
+    if (v !== undefined && v !== null && v !== '') return v;
+  }
+  return undefined;
+}
+
 function emptyToUndef(v) {
   if (v === '' || v === null || v === undefined) return undefined;
   return v;
 }
 
-/** Parallelum exige ano no path como "2017-3" (ano + código combustível FIPE). */
+function isParallelumYearFormat(s) {
+  return /^\d{4}-\d+$/.test(String(s));
+}
+
+/** Parallelum: segmento de ano no path = "2017-3" (ano + código combustível FIPE). */
 function buildYearId(data) {
-  const explicit = emptyToUndef(data.yearId);
-  if (explicit != null) return String(explicit);
+  const fuel = emptyToUndef(
+    getField(data, 'codigoTipoCombustivel', 'CodigoTipoCombustivel', 'tipoCombustivel', 'TipoCombustivel'),
+  );
 
-  const ano = emptyToUndef(data.ano);
-  if (ano != null && String(ano).includes('-')) return String(ano);
+  const toSegment = (raw) => {
+    if (raw === undefined || raw === null || raw === '') return undefined;
+    const s = String(raw).trim();
+    if (isParallelumYearFormat(s)) return s;
+    if (fuel != null && /^\d{4}$/.test(s)) return `${s}-${fuel}`;
+    return undefined;
+  };
 
-  const year = emptyToUndef(data.anoModelo) ?? ano;
-  const fuel = emptyToUndef(data.codigoTipoCombustivel);
-  if (year != null && fuel != null) return `${year}-${fuel}`;
+  const order = [
+    getField(data, 'yearId', 'YearId'),
+    getField(data, 'anoModelo', 'AnoModelo'),
+    getField(data, 'ano', 'Ano'),
+  ];
 
-  return ano != null ? String(ano) : undefined;
+  for (const c of order) {
+    const out = toSegment(c);
+    if (out != null) return out;
+  }
+  return undefined;
 }
 
 function toParallelumParams(data) {
+  const tipo = getField(data, 'codigoTipoVeiculo', 'CodigoTipoVeiculo');
+  const ref = getField(data, 'codigoTabelaReferencia', 'CodigoTabelaReferencia', 'reference', 'Reference');
+
   return {
-    vehicleType: vehicleTypeMap[data.codigoTipoVeiculo] || data.vehicleType || 'cars',
-    reference: String(data.codigoTabelaReferencia || data.reference || ''),
-    brandId: data.codigoMarca ?? data.brandId,
-    modelId: data.codigoModelo ?? data.modelId,
+    vehicleType: vehicleTypeMap[tipo] || getField(data, 'vehicleType', 'VehicleType') || 'cars',
+    reference: ref != null ? String(ref) : '',
+    brandId: getField(data, 'codigoMarca', 'CodigoMarca', 'brandId', 'BrandId'),
+    modelId: getField(data, 'codigoModelo', 'CodigoModelo', 'modelId', 'ModelId'),
     yearId: buildYearId(data),
   };
 }
 
-module.exports = { toParallelumParams };
+function isValidParallelumYearId(yearId) {
+  return yearId != null && isParallelumYearFormat(yearId);
+}
+
+module.exports = { toParallelumParams, isValidParallelumYearId };

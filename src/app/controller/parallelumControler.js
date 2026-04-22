@@ -1,4 +1,4 @@
-const { toParallelumParams } = require('../utils/toParallelumParams');
+const { toParallelumParams, isValidParallelumYearId } = require('../utils/toParallelumParams');
 const ParallelumRepository = require('../repositories/ParallelumRepository');
 
 class ParallelumController {
@@ -27,6 +27,15 @@ class ParallelumController {
 
   async result(request, response) {
     const p = toParallelumParams(request.body);
+
+    if (!isValidParallelumYearId(p.yearId)) {
+      return response.status(400).json({
+        error:
+          'Parallelum exige o ano no path como ANO-CÓDIGO_COMBUSTÍVEL (ex.: 2017-3). Envie anoModelo e codigoTipoCombustivel no JSON, ou yearId já montado.',
+        computed: p,
+      });
+    }
+
     const result = await ParallelumRepository.getValue(p.vehicleType, p.brandId, p.modelId, p.yearId, p.reference);
     response.json(result);
   }
