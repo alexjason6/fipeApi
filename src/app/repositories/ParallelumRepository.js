@@ -32,7 +32,7 @@ class ParallelumRepository {
   }
 
   async getModels(vehicleType, brandId, reference) {
-    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models`);
     if (reference) url.searchParams.set('reference', reference);
 
@@ -44,7 +44,7 @@ class ParallelumRepository {
   }
 
   async getYears(vehicleType, brandId, modelId, reference) {
-    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years`);
     if (reference) url.searchParams.set('reference', reference);
 
@@ -56,7 +56,7 @@ class ParallelumRepository {
   }
 
   async getValue(vehicleType, brandId, modelId, yearId, reference) {
-    const tipo = vehicleType === 1 ? 'carro' : vehicleType === 2 ? 'moto' : 'caminhao';
+    const tipo = vehicleType === 1 ? 'cars' : vehicleType === 2 ? 'motorcycles' : 'trucks';
     const url = new URL(`${baseUrl}/${tipo}/brands/${brandId}/models/${modelId}/years/${yearId}`);
     if (reference) url.searchParams.set('reference', reference);
 
