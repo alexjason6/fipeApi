@@ -15,6 +15,8 @@ class ParallelumController {
 
   async showModels(request, response) {
     const p = toParallelumParams(request.body);
+    console.log('[Parallelum POST /parallelum/listmodels] body:', JSON.stringify(request.body));
+    console.log('[Parallelum POST /parallelum/listmodels] params:', JSON.stringify(p));
     const models = await ParallelumRepository.getModels(p.vehicleType, p.brandId, p.reference);
     response.json(models);
   }

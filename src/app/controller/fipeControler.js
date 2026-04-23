@@ -28,6 +28,11 @@ class FipeController {
     const data = request.body;
     const p = toParallelumParams(data);
 
+    if (!useFipeOficial) {
+      console.log('[Parallelum POST /listmodels] body:', JSON.stringify(data));
+      console.log('[Parallelum POST /listmodels] params:', JSON.stringify(p));
+    }
+
     const models = useFipeOficial
       ? await FipeRepository.list(data, 'ConsultarModelos')
       : await ParallelumRepository.getModels(p.vehicleType, p.brandId, p.reference);
