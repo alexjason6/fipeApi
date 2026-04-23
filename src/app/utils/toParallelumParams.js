@@ -22,21 +22,28 @@ function emptyToUndef(v) {
   return v;
 }
 
+/** Marca, modelo, referência, ano no path: aceita number ou string (ex.: 23 ou "23"). */
+function asPathId(v) {
+  if (v === undefined || v === null) return undefined;
+  if (typeof v === 'number' && Number.isFinite(v)) return String(Math.trunc(v));
+  const s = String(v).trim();
+  return s === '' ? undefined : s;
+}
+
 function isParallelumYearFormat(s) {
   return /^\d{4}-\d+$/.test(String(s));
 }
 
 /** Parallelum: segmento de ano no path = "2017-3" (ano + código combustível FIPE). */
 function buildYearId(data) {
-  const fuel = emptyToUndef(
-    getField(data, 'codigoTipoCombustivel', 'CodigoTipoCombustivel', 'tipoCombustivel', 'TipoCombustivel'),
-  );
+  const fuelRaw = getField(data, 'codigoTipoCombustivel', 'CodigoTipoCombustivel', 'tipoCombustivel', 'TipoCombustivel');
+  const fuel = emptyToUndef(fuelRaw);
 
   const toSegment = (raw) => {
     if (raw === undefined || raw === null || raw === '') return undefined;
     const s = String(raw).trim();
     if (isParallelumYearFormat(s)) return s;
-    if (fuel != null && /^\d{4}$/.test(s)) return `${s}-${fuel}`;
+    if (fuel != null && /^\d{4}$/.test(s)) return `${s}-${String(fuel).trim()}`;
     return undefined;
   };
 
@@ -53,16 +60,36 @@ function buildYearId(data) {
   return undefined;
 }
 
+/** codigoTipoVeiculo 1|"1" ou slug cars|Cars; vehicleType opcional como slug. */
+function resolveVehicleType(tipoRaw, slugRaw) {
+  const slug = emptyToUndef(slugRaw);
+  if (slug != null) {
+    const s = String(slug).trim().toLowerCase();
+    if (s === 'cars' || s === 'motorcycles' || s === 'trucks') return s;
+  }
+  if (tipoRaw === undefined || tipoRaw === null || tipoRaw === '') return 'cars';
+  if (typeof tipoRaw === 'string') {
+    const t = tipoRaw.trim().toLowerCase();
+    if (t === 'cars' || t === 'motorcycles' || t === 'trucks') return t;
+  }
+  const n = Number(String(tipoRaw).trim());
+  if (!Number.isNaN(n) && vehicleTypeMap[n]) return vehicleTypeMap[n];
+  return 'cars';
+}
+
 function toParallelumParams(data) {
   const tipo = getField(data, 'codigoTipoVeiculo', 'CodigoTipoVeiculo');
+  const slug = getField(data, 'vehicleType', 'VehicleType');
   const ref = getField(data, 'codigoTabelaReferencia', 'CodigoTabelaReferencia', 'reference', 'Reference');
 
+  const refStr = ref != null && ref !== '' ? String(ref).trim() : '';
+
   return {
-    vehicleType: vehicleTypeMap[tipo] || getField(data, 'vehicleType', 'VehicleType') || 'cars',
-    reference: ref != null ? String(ref) : '',
-    brandId: getField(data, 'codigoMarca', 'CodigoMarca', 'brandId', 'BrandId'),
-    modelId: getField(data, 'codigoModelo', 'CodigoModelo', 'modelId', 'ModelId'),
-    yearId: buildYearId(data),
+    vehicleType: resolveVehicleType(tipo, slug),
+    reference: refStr,
+    brandId: asPathId(getField(data, 'codigoMarca', 'CodigoMarca', 'brandId', 'BrandId')),
+    modelId: asPathId(getField(data, 'codigoModelo', 'CodigoModelo', 'modelId', 'ModelId')),
+    yearId: asPathId(buildYearId(data)),
   };
 }
 
